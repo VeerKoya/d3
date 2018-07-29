@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+<script type="text/javascript" src="dist/fullpage.js"></script>
+<script type="text/javascript" src="dist/fullpage.extensions.min.js"></script>
+
+<!--script type="text/javascript" src="https://github.com/alvarotrigo/fullPage.js/blob/master/dist/fullpage.extensions.min.js"></script>
+<script type="text/javascript" src="https://github.com/alvarotrigo/fullPage.js/blob/master/dist/fullpage.js"></script-->
+
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="dist/fullpage.css" />
+        <link rel="stylesheet" type="text/css" href="dist/examples.css" />
+
+        <!--link rel="stylesheet" type="text/css" href="https://github.com/alvarotrigo/fullPage.js/blob/master/dist/fullpage.css" />
+        <link rel="stylesheet" type="text/css" href="https://github.com/alvarotrigo/fullPage.js/blob/master/examples/examples.css" /-->
+        <style>
+            /* Common */
+           .div {
+                text-align: justify; 
+                margin-left: 200px;
+                margin-right:200px;
+                margin-top:20px;
+                color:white;
+           }
+
+           .divChart {
+                width: 100%;
+               /* height:100%;
+               vertical-align: top;*/
+               align-content: center;
+           }
+
+           intro {
+               text-align: center;
+           }
+
+           h2 {
+               font-size: 20px;
+               text-decoration: underline;
+               font-weight: bold;
+           }
+
+            .label {
+                font-weight: bold;
+                font-size:15px;
+            }
+
+            .annotate {
+                font-size:medium;
+                fill:white;
+                border:1px;
+                border-color: gray;
+                border-radius: 8px;  
+
+            }
+
+            div.tooltip {   
+                position: absolute;           
+                text-align: left;           
+                width: 200px;                  
+                height: auto;                 
+                padding: 10px;             
+                font: 12px sans-serif;        
+                background: lightsteelblue;   
+                border: 0px;      
+                border-radius: 8px;           
+                pointer-events: none;         
+            }
+
+            .key-dot {
+                display: inline-block;
+                height: 10px;
+                margin-right: .5em;
+                width: 10px;
+            }
+
+            .legend2 {
+                float:left;
+                margin-right: 1em;
+                padding:10,10,0,5;
+                font-size: 12px;
+            }
+
+           /* rect:hover {
+                fill: yellowgreen ;
+            } */
+
+           /*Section 3 - Chart1*/
+           .axis {
+                font: 10px sans-serif;
+            }
+
+            .axis path,
+            .axis line {
+            fill: none;
+            stroke: #D4D8DA;
+            stroke-width: 2px;
+            shape-rendering: crispEdges;
+            }
+
+            .line {
+                fill: none;
+                stroke: lightgreen;
+                stroke-width: 5px;
+            }
+           .overlay {
+                fill: none;
+                pointer-events: all;
+            }
+
+            .focus circle {
+                fill: #F1F3F3;
+                stroke: darkgreen;
+                stroke-width: 5px;
+            }
+            
+            .hover-line {
+                stroke: darkgreen;
+                stroke-width: 2px;
+                stroke-dasharray: 3,3;
+            }
+            
+            .dot {
+                fill:blue;
+            }
+            /*Section 3 - Chart2*/
+            
+            /* Section 3- Chart 3 */
+            .sectors_3 {
+                border: 1px solid green;
+                padding:5px;
+            }
+            
+            .axis rect.rectbar:hover {
+                fill: yellowgreen;
+            }
+        </style>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#myContainer').fullpage({
+                    sectionsColor: ['#ff73a1', '#4BBFC3', '#7BAABE', '#4BBFC3', '#4BBFC3', '#ccc'],
+                    anchors: ['firstPage', 'secondPage', '3rdPage', '4thPage'],
+                    //menu: '#menu',
+                    slidesNavigation: true,
+                    scrollHorizontally: true,
+                    scrollHorizontallyKey: 'YWx2YXJvdHJpZ28uY29tX01mU2MyTnliMnhzU0c5eWFYcHZiblJoYkd4NVNRcg==',
+                    afterRender: function(){
+		                var pluginContainer = this;
+		                console.log("The resulting DOM structure is ready");
+                    },
+                    afterLoad: function(origin, destination, direction){
+                        console.log("afterLoad--" + "anchorLink: " + destination + " index: " + destination.index);
+                        
+                        switch (destination.index) {
+                            case 0:
+                                //No action    
+                                break;
+                            case 1:
+                                
+                                
+
+                                break;
+                            case 2:
+                                //Loaded for the first time when loaded from section 3
+                                drawChart3_1();
+                                break;
+                            case 3:
+                                //Loaded for the first time when loaded from section 4
+                                drawChart4_1();
+                                break;
+                            default:
+                                break;
+                        }
+                        if(destination.index == 0) {
+
+                        }
+                        //using index
+                        if(origin != null && origin.index == 2){
+                            //alert("Section 3 ended loading");
+                        }
+
+                        //using anchorLink
+                        if(origin != null && origin.anchor == 'secondSlide'){
+                            //alert("Section 2 ended loading");
+                        }
+                    },
+                    afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex){
+                        console.log("slideLoad--" + "anchorLink: " + anchorLink + " index: " + index + " slideAnchor: " + slideAnchor + " slideIndex: " + slideIndex);
+                        
+                        //anchorLink: Page or Section
+                        //slideAnchor: Destination slide Index
+                        switch (anchorLink.anchor) {
+                            case "firstPage":
+                                switch (slideAnchor.index) {
+                                    case 0:
+                                        
+                                        break;
+                                    case 1:
+                                        
+                                        break;
+                                    case 2:
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case "secondPage":
+
+                            case "3rdPage":
+
+                                switch (slideAnchor.index) {
+                                    case 0:
+                                        drawChart3_1();
+                                        break;
+                                    case 1:
+                                        drawChart3_2();
+                                        break;
+                                    case 2:
+                                        drawChart3_3();
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                case "4thPage":
+
+                                    switch (slideAnchor.index) {
+                                        case 0:
+                                            drawChart4_1();
+                                            break;
+                                        case 1:
+                                            drawChart4_2();
+                                            break;
+                                        case 2:
+                                            drawChart4_3();
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                            default:
+                                break;
+                        }
+
+                        //3rd Page Index 2 = 3.2
+                        if(anchorLink.anchor == "3rdPage") {
+
+                            if(anchorLink.index == 2) {
+
+                            }
+                        }
+
+
+                    },
+                    onSlideLeave: function(anchorLink, index, slideIndex, direction){
+                        console.log("----------------");
+                        console.log("onSlideLeave--" + "anchorLink: " + anchorLink + " index: " + index + " slideIndex: " + slideIndex + " direction: " + direction);
+                    }
+                });
+            });
+
+            </script>
+
+
+    </head>
+<body>
+    <ul id="menu" style="display:none">
+            <li data-menuanchor="firstPage"><a href="#firstPage">First slide</a></li>
+            <li data-menuanchor="secondPage"><a href="#secondPage">Second slide</a></li>
+            <li data-menuanchor="3rdPage"><a href="#3rdPage">Third slide</a></li>
+            <li data-menuanchor="4thpage"><a href="#4thpage">Fourth slide</a></li>
+        </ul>
+        <div id="myContainer">
+
+            <!-- Section 1 - Introduction -->
+            <div class="section">
+                    <div class="slide">
+                        <di class="intro">
+                            <h1>Immigration Trend into United States of America </h1>
+                            <h3 style="text-align: right; margin-right:120px;">Storytelling with Interactive Data Visualization</h3>
+                                <br/>
+                            <div class="div">
+                                <h2 style="margin-left:-40px"><b>Approach:</b> </h2>
+                                <span>Following the Hybrid Model of Data visualization starting with Interactive slideshow and then drilldown approach for each slide.</span>
+                                <br/><br/>
+
+                                <h2 style="margin-left:-40px"><b>Rules: </b></h2>
+
+                                <h2><b>Horizontal Scrolling: </b></h2>
+                                <span>Follows Drilldown approach ( expands the informations shown on the main slide but return back to current slide parent).
+                                Drill-down enables user to narrow data selection through either setting data filters to specific dictionary values or/and achieve similar result by visually choosing regions (e.g. rectangles) on interactive charts, so only values associated with regions will stay in data selection. In 2nd case charts behave as filters and as such eliminating need for filters if user prefer to use only selection tools like mouse.
+                                </span>
+                                <span>User can jump between sub-slides (horizontal) if necessary using small icons in the bottom though, but cannot jump between pages(slides)</span>
+                                </br><br/>
+                                <h2><b>Vertical Scrolling:</b></h2>
+                                <span>Follows Interactive Slideshow. Allowing user to navigate through owner design approach</span>
+
+                                <br/><br/><br/>
+                                <h2 style="color:red;text-align:right">Click right Arrow now -></h2>
+                            </div>
+                        </di>
+                    </div>
+                    <div class="slide"><h1>Immigration Trends into United States of America</h1>
+                        <h2>Data Source:<a href="https://www.kaggle.com/kiva/data-science-for-good-kiva-crowdfunding" target="_blank">Kiva CrowdFunding</a></h2>
+                        <div class="div">
+                                <a href="https://www.kaggle.com/kiva" target="_blank">Kiva.org</a> is an online crowdfunding platform to extend financial services to poor and financially excluded people around the world. Kiva lenders have provided over $1 billion dollars in loans to over 2 million people.
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="slide"><h1>About Data</h1>
+                        <h2>Data Preparation:</h2>
+                        <div class="div">
+                            <span>
+                                Upon data files downloaded from <a href="https://www.kaggle.com/kiva/data-science-for-good-kiva-crowdfunding" target="_blank">Kiva.org</a>, it was cleaned using Data Preparation tools and corrected as needed. Aggregation was done into separate files for easy and flexibility for better visualization in d3.js
+                            </span>
+                        
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section:2 Essay Section -->
+                <div class="section">
+                    <h1>Essay - Kiva CrowdFunding</h1>
+                    <div class="div">
+                        <h2>Charts:</h2>
+                        <span>
+                            <ul>
+                                <li>Funding Based</li>
+                                <li>Country Based</li>
+                            </ul>
+                        </span>
+                        <h2>Overview:</h2>
+                        <span>
+                            Upon partial analysis of the data, trying to showcase available datapoints into Data visualization for better understanding the crowdfunding with respect to timelines, sectors, country, partners etc.
+                            In this effort, i was able to concentrate on timelines, sectors, countries, partners and ignored many other data points that are available in the dataset. Below are the two approaches built to better convey the understanding.
+                        </span>
+                        <h2>Funding Based Charts</h2>
+                        <span>
+                            <ul>
+                                <li>
+
+                                </li>
+                            </ul>
+                        <span>
+                            
+                        </span>
+                        </span>
+
+                        <h2>Country Based Charts</h2>
+                        <span>
+                            
+                        </span>
+
+                    </div>
+                    
+                
+                </div>
+
+                <!--Section:3 Charts Section: Funding Amount Based -->
+                <div class="section">
+                    <div class="slide">
+                        <div class="divChart">
+                            <h2>Theme:Immigration Trend into United States of America</h2>
+                            <div class="svgChart" id="divChart3_1" >
+                                <div class="div">
+                                    Below chart displays the Citizenship count that was granted to Immigrants between years 1999 - 2016.
+                                    Hover the chart to see Citizenship count in each year.
+                                    <br/>
+                                    <span style="color:black"><b>Annotations:</b> Noticed that there is a spike in Year of 2008. It might be because of General Election Year and Immigrants apply for Citizenship.</span>
+                                </div>
+                                <svg id="svgChart3_1" width="960" height="500"></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide">
+                            <div class="divChart">
+                                <h2>Stacked Area Chart - Sector Funding</h2>
+                                <div class="svgChart" id="divChart3_2">
+                                    <div class="div">
+                                        Continuing the prior slide, this slide is expanded to show the funding dispersed in various sectors.
+                                        <br/>
+                                        <span>Used: schemeCategory20c for coloring Sectors</span>
+                                        <br/>
+                                        <span style="color:black"><b>Annotations:</b> Spikes in March is noticed espically from 2015 onwards.</span>
+                                        <svg id="svgChart3_2" width="960" height="600"></svg>
+                                    </br>
+                                        <div id="legend3_2"></div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                    </div>
+                    <div class="slide">
+                            <div class="divChart">
+                                <h2>Bar Chart - Immigration into United States of America(Filters,Parametrized)</h2>
+                                <div class="svgChart" id="divChart3_3">
+                                    <div class="div">
+                                        Continuing the prior slide, this graph helps to view the content filtering parameterized selection of Year.
+                                        <br/>
+                                        <span>Used: schemeCategory20c for coloring Sectors</span>
+                                        <br/>
+                                        <span style="color:black"><b>Annotations:</b> Highest and Lowest Immigration by Year</span>
+                                        <h3>
+                                            <div id="sectors" style="margin:10px"> </div>
+                                        </h3>
+                                         <p class="sectors_3">
+                                             <button id="bSubmit" onclick="javascript:Refresh_Chart3_3()" >Refresh Chart</button>
+                                         </p>
+
+                                        <svg id="svgChart3_3" width="960" height="500"></svg>
+                                    </br>
+                                        <div id="legend3_3"></div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <!-- End of Section 3 -->
+
+                
+                <!--Section:4 Charts Section: Country Based -->
+                <div class="section">
+                    <div class="slide">
+                        <div class="divChart">
+                            <h2>Theme: Country Based Funding</h2>
+                            <div class="svgChart" id="divChart4_1" >
+                                <div class="div">
+                                    Below chart displays the Immigration from Top 50 Countries between years 1999 - 2000
+                                    
+                                    <br/>
+                                    <span style="color:black"><b>Annotations:</b> Noticed that there is typical spike in March in each year except 2014. It might be because of typical year end to most of the countries.</span>
+                                    <br/>
+                                    <div class="legend6">
+                                        <h3>Legend</h3>
+                                        <div id="legend"></div>
+                                    </div>
+                                    <svg id="svgChart4_1" width="1100" height="500"></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide">
+                            <div class="divChart">
+                               
+                                <div class="svgChart" id="divChart4_2">
+                                    
+                                </div>
+                            </div>
+                    </div>
+                    <div class="slide">
+                            <div class="divChart">
+                                
+                                <div class="svgChart" id="divChart3_3">
+                                    
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <!-- End of Section 4 -->
+
+
+
+            </div>
+
+    <!--div id="fullpage">
+            <div class="section active">Some section-1
+                    <div class="slide"> Slide 1 </div>
+                    <div class="slide"> Slide 2 </div>
+                    <div class="slide"> Slide 3 </div>
+                    <div class="slide"> Slide 4 </div>
+            </div>
+            <div class="section">Some section-2</div>
+            <div class="section">Some section-3</div>
+            <div class="section">Some section-4
+                    <div class="slide"> Slide 1 </div>
+                    <div class="slide"> Slide 2 </div>
+                    <div class="slide"> Slide 3 </div>
+                    <div class="slide"> Slide 4 </div>
+            </div>
+    </div-->
+    <input type="hidden" id="_4" value="3" />
+
+    <script>
+    new fullpage('#fullpage', {
+        //options here
+        autoScrolling:true,
+        scrollHorizontally: true,
+        //slidesNavigation:false,
+        //navigation:false,
+        licenseKey: "OPEN-SOURCE-GPLV3-LICENSE"
+    });
+    
+    //methods
+    //fullpage_api.setAllowScrolling(false);
+
+    
+     //Loading Data
+     
+    var parseTime = d3.timeParse("%Y");
+    
+    var formatNumber = d3.format(".2f"),
+        formatMillion = function(x) { return formatNumber(x/1e6 ) + "M"; };
+
+    
+    //var sectorLabels = ["1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010", "2011", "2012", "2013", "2014", "2015", "2016"];
+    var countryColors = ["#1b70fc", "#faff16", "#d50527", "#158940", "#f898fd", "#24c9d7", "#cb9b64", "#866888", "#22e67a", "#e509ae", "#9dabfa", "#437e8a", "#b21bff", "#ff7b91", "#94aa05", "#ac5906", "#82a68d", "#fe6616", "#7a7352", "#f9bc0f", "#b65d66", "#07a2e6", "#c091ae", "#8a91a7", "#88fc07", "#ea42fe", "#9e8010", "#10b437", "#c281fe", "#f92b75", "#07c99d", "#a946aa", "#bfd544", "#16977e", "#ff6ac8", "#a88178", "#5776a9", "#678007", "#fa9316", "#85c070", "#6aa2a9", "#989e5d", "#fe9169", "#cd714a", "#6ed014", "#c5639c", "#c23271", "#698ffc", "#678275", "#c5a121", "#a978ba", "#ee534e", "#d24506", "#59c3fa", "#ca7b0a", "#6f7385", "#9a634a", "#48aa6f", "#ad9ad0", "#d7908c", "#6a8a53", "#8c46fc", "#8f5ab8", "#fd1105", "#7ea7cf", "#d77cd1", "#a9804b", "#0688b4", "#6a9f3e", "#ee8fba", "#a67389", "#9e8cfe", "#bd443c", "#6d63ff", "#d110d5", "#798cc3", "#df5f83", "#b1b853", "#bb59d8", "#1d960c", "#867ba8", "#18acc9", "#25b3a7", "#f3db1d", "#938c6d", "#936a24", "#a964fb", "#92e460", "#a05787", "#9c87a0"];
+
+    var yearLabels = ["1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010", "2011", "2012", "2013", "2014", "2015", "2016"];
+    
+
+function hideAllCharts(){
+    d3.selectAll("svg")
+        .style("display", "none");
+
+    //d3.select("#svgChart1_1").style("display", "none");
+    //d3.select("#svgChart1_2").style("display", "none");
+    /*
+    eles = document.getElementsByClassName("svgChart");
+
+    for(var i=0;i< eles.length; i++) {
+        var element = document.getElementById(eles[i]);
+        element.style.display = "none";
+    }*/
+
+}
+
+
+function drawChart3_1() {
+
+    hideAllCharts();
+    //d3.select("#divChart1").style("display", "block");
+    d3.select("#svgChart3_1").style("display", "block");
+    
+    var bisectDate = d3.bisector(function(d) { return d.Year; }).left;
+
+    var svg = d3.select("#svgChart3_1"),
+        margin = {top: 60, right: 100, bottom: 60, left: 100},
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom,
+        g = svg.append("g")
+            .attr("class", "request")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+     //d3.select("#svgChart3_1").attr("align","center"); 
+    //svg.attr("transform", "translate(" + width/2 + "," + height + ")");
+
+    //svg.style("display","block");
+  // Add the clip path.
+    svg.append("clipPath")
+      .attr("id", "clip")
+    .append("rect")
+      .attr("width", width)
+      .attr("height", height);
+
+
+    var x = d3.scaleTime()
+        .rangeRound([0, width]);
+
+    var y = d3.scaleLinear()
+        .rangeRound([height, 0]);
+
+    var xAxis = d3.axisBottom(x);
+    var yAxis = d3.axisLeft(y);
+
+    var area = d3.area()
+        .x(function(d) { return x(d.Year); })
+        .y1(function(d) { return y(d.CitizenshipCount); });
+
+    d3.csv("YearCount.csv", function(error, data) {
+        //color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+        data.forEach(function(d) {
+            d.Year = parseTime(d.Year);
+            d.CitizenshipCount = +d.CitizenshipCount;
+        });
+    
+    x.domain(d3.extent(data, function(d) { return d.Year; }));
+    y.domain([0, d3.max(data, function(d) { return d.CitizenshipCount; })]);
+    //breating space for y-axes helps to write more scale
+
+    area.y0(y(0));
+
+    g.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+    .selectAll("text")
+        .attr("y", 10)
+        .attr("x", -10)
+        .attr("dy", ".35em")
+        //.attr("transform", "rotate(90)")
+        .style("text-anchor", "start");
+        //.style("fill", function(i) { return color(i); });
+
+    g.append("text")             
+        .attr("transform",
+        "translate(" + (width/2) + " ," + 
+                        (height + margin.top ) + ")")
+        .style("text-anchor", "middle")
+        .attr("class", "label")
+        .text("Year");
+    
+    g.append("g")
+      .attr("class", "axis")
+      .call(yAxis .ticks(20, "s"));
+
+    g.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -margin.left+45)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .attr("class", "label")
+      .style("text-anchor", "middle")
+      .text("Immigration in Millions($)");
+
+    g.append("path")
+        .datum(data)
+        .attr("fill", "steelblue")
+        .attr("class", "area")
+        .attr("d", area);
+
+    //g.append("g")
+    //    .attr("transform", "translate(0," + height + ")")
+    //    .call(d3.axisBottom(x));
+   
+    // text label for the x axis
+    /*
+    g.append("text")             
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top + 50) + ")")
+      .style("text-anchor", "start")
+      .attr("class", "label")
+      .text("Quarters");
+    */
+  /*  g.append("g")
+        .call(d3.axisLeft(y) .ticks(20, "s"))
+        .append("text")
+        .attr("fill", "#000")
+        .attr("transform", "rotate(-90)")
+        //.attr("y", 6)
+        //.attr("dy", "0.71em")
+        //.attr("text-anchor", "end")
+        .attr("y", 0 - margin.left)
+        .attr("x",0 - (height / 2))
+        .attr("dy", "1em")
+        .attr("text-anchor", "middle")
+        .text("Funding Amount in Millions($)");
+  */
+        var focus = g.append("g")
+        .attr("class", "focus")
+        .style("display", "none");
+
+    focus.append("line")
+        .attr("class", "x-hover-line hover-line")
+        .attr("y1", 0)
+        .attr("y2", height);
+
+    focus.append("line")
+        .attr("class", "y-hover-line hover-line")
+        .attr("x1", width)
+        .attr("x2", width);
+
+    focus.append("circle")
+        .attr("r", 7.5);
+
+    focus.append("text")
+        .attr("x", 15)
+      	.attr("dy", ".31em");
+
+    svg.append("rect")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .attr("class", "overlay")
+        .attr("width", width)
+        .attr("height", height)
+        .on("mouseover", function() { focus.style("display", null); })
+        .on("mouseout", function() { focus.style("display", "none"); })
+        .on("mousemove", mousemove);
+
+    function mousemove() {
+      var x0 = x.invert(d3.mouse(this)[0]),
+          i = bisectDate(data, x0, 1),
+          d0 = data[i - 1],
+          d1 = data[i],
+          d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+      focus.attr("transform", "translate(" + x(d.Year) + "," + y(d.CitizenshipCount) + ")");
+      focus.select("text").text(function() { return d3.format(".2f")(d.CitizenshipCount/1e6) + "M"; });
+      focus.select(".x-hover-line").attr("y2", height - y(d.CitizenshipCount));
+      focus.select(".y-hover-line").attr("x2", width + width);
+    }
+
+     //Each Highs 
+    /* var anot1 = g.append("text")
+        .attr("x", x(parseTime("2014-Oct")))
+        .attr("y", y(13046885)-50)
+        .attr("class","annotate")
+        .style("text-anchor", "middle");
+        
+        anot1.append("tspan")
+        .attr("x",  x(parseTime("2014-Oct")))
+        .attr("dy","1.0em")
+        .text("2014 Oct. Peak");
+        
+        anot1.append("tspan")
+        .attr("x",  x(parseTime("2014-Oct")))
+        .attr("dy","1.0em")
+        .text( d3.format(".2f")(13046885) + "M ($ 13046885)" ); */
+
+    var anot2 = g.append("text")
+        .attr("x", x(parseTime("2003")))
+        .attr("y", y(461445)+10)
+        .attr("class","annotate")
+        .style("text-anchor", "middle");
+        
+        anot2.append("tspan")
+        .attr("x",  x(parseTime("2003")))
+        .attr("dy","1.0em")
+        .text("2003 Low");
+        
+        anot2.append("tspan")
+        .attr("x",  x(parseTime("2003")))
+        .attr("dy","1.0em")
+        .text( d3.format(".2f")(461445/1e6) + "M ( 461445)" );
+
+    var anot3 = g.append("text")
+        .attr("x", x(parseTime("2008")))
+        .attr("y", y(1045346)+50)
+        .attr("class","annotate")
+        .style("text-anchor", "middle");
+        
+        anot3.append("tspan")
+        .attr("x",  x(parseTime("2008")))
+        .attr("dy","1.0em")
+        .text("2008 Peak");
+
+        anot3.append("tspan")
+        .attr("x",  x(parseTime("2008")))
+        .attr("dy","1.0em")
+        .text("(General Election Year)");
+
+        anot3.append("tspan")
+        .attr("x",  x(parseTime("2008")))
+        .attr("dy","1.0em")
+        .text( d3.format(".2f")(1045346/1e6) + "M (1045346)" );
+
+//    var anot4 = g.append("text")
+//         .attr("x", x(parseTime("2017-Mar")))
+//         .attr("y", y(16472800)-50)
+//         .attr("class","annotate")
+//         .style("text-anchor", "middle");
+        
+//         anot4.append("tspan")
+//         .attr("x",  x(parseTime("2017-Mar")))
+//         .attr("dy","1.0em")
+//         .text("2016 Mar Peak");
+        
+//         anot4.append("tspan")
+//         .attr("x",  x(parseTime("2017-Mar")))
+//         .attr("dy","1.0em")
+//         .text( d3.format(".2f")(16472800) + "M ($ 16472800)" );
+
+        //Scatter Plot for dots
+        g.append("g")
+            .selectAll("dot")
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr("class","dot")
+                .attr("r", 2)
+                .attr("cx", function(d) { return x(d.Year); })
+                .attr("cy", function(d) { return y(d.CitizenshipCount); });
+
+    });
+
+}  // End of svgChart1
+
+
+function drawChart3_2() {
+
+
+}
+
+
+function loadData3_3(draw) {
+
+    d3.csv("YearCount.csv", type, function(error, data) {
+        
+        data.slice().reverse().forEach(function(item, index, object) {
+            var chkbox = document.getElementsByName(item.Year);
+
+            if(chkbox != "undefined" && chkbox != null && chkbox.length ==1 ){
+                if(chkbox[0].checked == true ) {
+                    object[index].Year = item.Year;
+                    object[index].CitizenshipCount = +item.CitizenshipCount;
+                } else if( chkbox[0].checked == false) {
+                // object.splice( index, 1);
+                data.splice(object.length - 1 - index, 1);
+                }
+            }
+    
+        });
+
+
+    if(draw) {
+        performDrawing_Chart3_3(data);
+    }
+    //return data;
+    });
+}
+
+function Refresh_Chart3_3() {
+
+    //Since not using clientside cache, reloading from csv (temporary)
+    // can be implemented with JQuery in storing in cache and loading as needed for filtering etc
+    //primaryData
+    //primaryData = loadData(false);
+
+    var newData;
+    loadData3_3(true);
+}
+
+function createControls_Chart3_3(){
+
+    var pDiv = document.getElementById("sectors");
+    
+    var newString = "";
+    for(var i=0; i< yearLabels.length; i++) {
+        newString += '<div class="legend2"><input type="checkbox" checked id="chk' +i + '" name="'+ yearLabels[i] + '" value="' + yearLabels[i] + '"><label for="chk' + i + '">' + yearLabels[i] + '</label></div>' ;
+    }
+    document.getElementById("sectors").innerHTML = newString;
+}
+
+function type(d) {
+  d.CitizenshipCount = +d.CitizenshipCount;
+  return d;
+}
+
+function drawChart3_3() {
+
+    hideAllCharts();
+
+    d3.select("#svgChart3_3").style("display", "block");
+
+    createControls_Chart3_3();
+    loadData3_3(true);
+
+
+    /* var tooltip = d3.select("body")
+        .append("div")
+        //.style("position", "absolute")
+        .style("position", "absolute")
+        .style("top","7%")
+        .style("left","22%")
+        .style("height", "20px")
+        .style("width", "200px")
+        .style("background-color", "gray")
+        .style("color", "white")
+        .style("z-index", "100")
+        .style("visibility", "hidden")
+        .text("Most funding Sector: Agriculture");
+
+        //tooltip.style("visibility", "visible");
+        tooltip.style("visibility", "hidden"); */
+}
+
+function performDrawing_Chart3_3(myData) {
+
+    var svg = d3.select("#svgChart3_3"),
+        margin = {top: 60, right: 100, bottom: 120, left: 100},
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom;
+
+    //svg.select("#svgg").selectAll("*").remove();
+    svg.selectAll("*").remove();
+
+    g = svg.append("g")
+        .attr("class", "request")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+    var x = d3.scaleBand()
+            .rangeRound([0,width])
+            .paddingInner(0.05);
+
+    var y = d3.scaleLinear()
+        .range([height, 0]);
+
+    var colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+    var xAxis = d3.axisBottom(x);
+    //var yAxis = d3.axisLeft(y).tickFormat(function(d){ return d;});
+    var yAxis = d3.axisLeft()
+        .scale(y)
+        .tickFormat(formatMillion);
+
+    var div = d3.select("body").append("div")   
+        .attr("class", "tooltip")               
+        .style("opacity", 0);
+
+    yDomainBar = myData.map(function(d) { return d.CitizenshipCount; });
+
+    x.domain(myData.map(function(d) { return d.Year; }));
+    //y.domain([0, d3.max(yDomainBar)]);
+    y.domain([0, d3.max(myData, function(d) { return d.CitizenshipCount; })]);
+    //adding 10M to draw one more y ticks in the graph
+    
+    
+    g.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text")
+        .attr("y", 10)
+        .attr("x", 9)
+        .attr("dy", ".35em")
+        .attr("transform", "rotate(45)")
+        .attr("data-legend",function(d) { return d.Year})
+        .style("text-anchor", "start");
+
+    g.append("g")
+        //.attr("transform", "translate(" + x(0) + ",0)")   
+        .attr("class", "axis")
+        .attr("y", 0)
+        .attr("x", 0)
+        .call(yAxis .ticks(20, "s"));
+
+        // text label for the x axis
+    g.append("text")             
+        .attr("transform",
+                "translate(" + (width/2) + " ," + 
+                            (height + margin.top) + ")")
+        .style("text-anchor", "middle")
+        .attr("class", "label")
+        .text("Years");
+
+    // text label for the y axis
+    g.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x",0 - (height / 2))
+        .attr("dy", "1em")
+        .attr("class", "label")
+        .style("text-anchor", "middle")
+        .text("Citizenship Count in Millions ($)"); 
+
+    //var formatValue = d3.format(".2"); 
+
+    g.selectAll("rect")
+        .data(myData)
+        .enter()
+        .append("rect")
+        .attr("class", "rectbar")
+        .attr("x", function(d) { return x(d.Year); })
+        .attr("width", x.bandwidth())
+        .attr("y", function(d) { return y(d.CitizenshipCount); })
+        .attr("height", function(d) { return height - y(d.CitizenshipCount); })
+        .attr("fill", function(d,i) { return colorScale(d.Year);} )
+        //.attr("fill", function(d,i) {
+        //	return "rgb(0, " +  (i+1) * 20 +", " + (i+5) * 20 + ")";
+            //return "rgb(0, 0, " + 221 + ")";
+        // })
+        .on('click', function() {
+                //sortBars();
+            })
+        /* .on('hover', function() {
+            div.transition()
+                .duration(100)
+                .style("fill", "yellowgreen");
+        }) */
+        .on("mouseover", function(d) {      
+            div.transition()        
+                .duration(200)      
+                .style("opacity", .9);      
+            //div .html(formatTime(d.Year) + "<br/>"  + d.close)  
+            div .html("<b>Year:</b>" + d.Year + "<br/><b>CitizenShip Count</b>:"  + formatMillion(d.CitizenshipCount))
+                .style("left", (d3.event.pageX) + "px")     
+                .style("top", (d3.event.pageY - 28) + "px");    
+            
+            })                  
+        .on("mouseout", function(d) {       
+            div.transition()        
+                .duration(500)      
+                .style("opacity", 0);   
+        })
+
+        
+        var chkbox4 = document.getElementById("chk4");
+        var anot1text = document.getElementById("anot1text");
+        if(anot1text != "undefined" && anot1text != null) {
+            anot1text.style.display = "none";
+        }
+
+        if(chkbox4 != "undefined" && chkbox4 != null ){
+            if(chkbox4.checked == true ) {
+            //Annotations
+            var anot1 = g.append("text")
+                .attr("id", "anot1text")
+                .attr("x", x("2003"))
+                .attr("y", y(461445))
+                .attr("class","annotate")
+                .style("text-anchor", "middle");
+            
+            anot1.append("tspan")
+                .attr("x",  x("2003"))
+                .attr("dy","1.0em")
+                .text("Lowest Immigration Year: 2003");
+            
+            anot1.append("tspan")
+                .attr("x",  x("2003"))
+                .attr("dy","1.0em")
+                .text( formatMillion(461445) + "( 461445)" );
+
+                d3.select("#anot1text").style("display", "block");
+
+            }
+
+        }
+        
+        var chkbox09 = document.getElementById("chk9");
+        var anot2text = document.getElementById("anot2text");
+        if(anot2text != "undefined" && anot2text != null) {
+            anot2text.style.display = "none";
+        } 
+
+        if(chkbox09 != "undefined" && chkbox09 != null ){
+            if(chkbox09.checked == true ) {
+            //Annotations
+            var anot2 = g.append("text")
+                .attr("id", "anot2text")
+                .attr("x", x("2008"))
+                .attr("y", y(1045346))
+                .attr("class","annotate")
+                .style("text-anchor", "middle");
+                
+                anot2.append("tspan")
+                .attr("x",  x("2008"))
+                .attr("dy","1.0em")
+                .text("Highest Immigration Year: 2008");
+                
+                anot2.append("tspan")
+                .attr("x",  x("2008"))
+                .attr("dy","1.0em")
+                .text( formatMillion(1045346) + "( 1045346)" );
+
+                d3.select("#anot2text").style("display", "block");
+            }
+
+        }
+
+
+        
+
+
+
+
+    }
+
+
+
+//Section 4
+
+function loadData_4() {
+  
+    
+    
+}
+
+
+function drawLegend4_1(xDomain) {
+    var legend = document.getElementById("legend");
+    var newString = "";
+    //<div class="legend2"> <p class="country-name"><span class="key-dot"></span>Agriculture</p> </div>
+    for(var i=0; i< xDomain.length; i++) {
+        //newString += '<span id=L' + i + "'>" + xDomain[i] + "</span>" ;
+        //newString += '<div class="legend2"> <p class="country-name"><span class="key-dot" style="background:' + countryColors[i] + '"></span>' + xDomain[i] + '</p> </div>';
+        newString += '<div class="legend2"><span class="key-dot" style="background:' + countryColors[i] + '"></span>' + xDomain[i] + '</div>';
+    }
+    document.getElementById("legend").innerHTML = newString;
+}
+
+function drawChart4_1() {
+
+
+    var div = d3.select("body").append("div")   
+        .attr("class", "tooltip")               
+        .style("opacity", 0);
+
+    var svg = d3.select("#svgChart4_1"),
+        margin = {top: 10, right: 10, bottom: 100, left: 60},
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom;
+
+    g = svg.append("g")
+        .attr("class", "request")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  
+    //d3.csv("data/country_funding_sector1.csv", function(error, data1) {
+    d3.csv("CountryCount1.csv", function(error, data1) {
+        data1.forEach(function(d) {
+            d.Country = d.Country;
+            d.CitizenshipCount = +d.CitizenshipCount;
+    });
+
+    //data1.sort(function(a, b) { return b.CitizenshipCount - a.CitizenshipCount; });
+
+    var x = d3.scaleBand()
+            .rangeRound([0,width])
+            .paddingInner(0.05);
+
+    var color = d3.scaleOrdinal()
+        .range(countryColors)
+
+    var y = d3.scaleLinear()
+        .range([height, 0]);
+
+    var xAxis = d3.axisBottom()
+        .scale(x);
+
+    //var yAxis = d3.axisLeft(y).tickFormat(function(d){ return d;});
+    var yAxis = d3.axisLeft()
+        .scale(y)
+        .tickFormat(formatMillion);
+
+    yDomainBar = data1.map(function(d) { return d.CitizenshipCount; });
+
+    x.domain(data1.map(function(d) { return d.Country; }));
+    //y.domain([0, d3.max(yDomainBar)]);
+    y.domain([0, d3.max(data1, function(d) { return d.CitizenshipCount; })]);
+    //adding 10M to draw one more y ticks in the graph
+
+//    xDomain = data1.map(function(d) { return d.Country; });
+    //yDomainBar = data.map(function(d) { return d.sectors; });
+//    yDomainBar = data1.map(function(d) { return d.CitizenshipCount; });
+    //yDomainLine =  data.map(function(d) { return d.partners; });
+
+//    x1.domain(xDomain);
+    //y.domain([0, d3.max(data, function(d) { return d.sectors; })]);
+//    y1.domain([0, d3.max(yDomainBar)]);
+
+//    var legend = document.getElementById("legend");
+//    var newString = "";
+    //<div class="legend2"> <p class="country-name"><span class="key-dot"></span>Agriculture</p> </div>
+//    for(var i=0; i< xDomain.length; i++) {
+        //newString += '<span id=L' + i + "'>" + xDomain[i] + "</span>" ;
+        //newString += '<div class="legend2"> <p class="country-name"><span class="key-dot" style="background:' + countryColors[i] + '"></span>' + xDomain[i] + '</p> </div>';
+//        newString += '<div class="legend2"><span class="key-dot" style="background:' + countryColors[i] + '"></span>' + xDomain[i] + '</div>';
+//    }
+//    document.getElementById("legend").innerHTML = newString;
+    
+
+    g.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+        .selectAll("text")
+        .attr("y", 10)
+        .attr("x", 9)
+        .attr("dy", ".35em")
+        .attr("transform", "rotate(45)")
+        .attr("data-legend",function(d) { return d.Country})
+        .style("text-anchor", "start");
+
+  g.append("g")
+        //.attr("transform", "translate(" + x(0) + ",0)")   
+        .attr("class", "axis")
+        .attr("y", 0)
+        .attr("x", 0)
+        .call(yAxis .ticks(20, "s"));
+
+    // text label for the x axis
+  g.append("text")             
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top) + ")")
+      .style("text-anchor", "middle")
+      .attr("class", "label")
+      .text("Countries");
+
+    // text label for the y axis
+    g.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .attr("class", "label")
+      .style("text-anchor", "middle")
+      .text("Citizenship in Millions(M)"); 
+
+    var anot2 = g.append("text")
+        .attr("x", x("Italy")-25)
+        .attr("y", y(48210)-180)
+        .attr("class","annotate")
+        .style("text-anchor", "middle");
+        
+        anot2.append("tspan")
+        .attr("x",  x("Italy")-25)
+        .attr("dy","1.0em")
+        .text("Lowest Immigration From: Italy");
+        
+        anot2.append("tspan")
+        .attr("x",  x("Italy")-25)
+        .attr("dy","1.0em")
+        .text( d3.format(".2f")(48210/1e6) + "M ( 48210)" );
+
+    var anot3 = g.append("text")
+        .attr("x", x("Mexico")+135)
+        .attr("y", y(1989534)-10)
+        .attr("class","annotate")
+        .style("text-anchor", "middle");
+        
+        anot3.append("tspan")
+        .attr("x",  x("Mexico")+135)
+        .attr("dy","1.0em")
+        .text("Highest Immigration From: Mexico");
+
+        anot3.append("tspan")
+        .attr("x",  x("Mexico")+135)
+        .attr("dy","1.0em")
+        .text( d3.format(".2f")(1989534/1e6) + "M (1989534)" );
+
+
+    g.selectAll("rect")
+        .data(data1)
+        .enter()
+        .append("rect")
+        .attr("class", "rectbar")
+        .attr("x", function(d) { return x(d.Country); })
+        .attr("width", x.bandwidth())
+        .attr("y", function(d) { return y(d.CitizenshipCount); })
+        .attr("height", function(d) { return height - y(d.CitizenshipCount); })
+        .attr("fill", function(d,i) { return color(d.Country);} )
+        .text(function(d){ return formatMillion(d.CitizenshipCount);})
+        //.attr("fill", function(d,i) {
+        //	return "rgb(0, " +  (i+1) * 20 +", " + (i+5) * 20 + ")";
+            //return "rgb(0, 0, " + 221 + ")";
+        // })
+        .on('click', function() {
+                //sortBars();
+            })
+        /* .on('hover', function() {
+            div.transition()
+                .duration(100)
+                .style("fill", "yellowgreen");
+        }) */
+        .on("mouseover", function(d) {      
+            div.transition()        
+                .duration(200)      
+                .style("opacity", .9);      
+            //div .html(formatTime(d.Year) + "<br/>"  + d.close)  
+            div .html("<b>Country:</b>" + d.Country + "<br/><b>CitizenShip Count</b>:"  + formatMillion(d.CitizenshipCount))
+                .style("left", (d3.event.pageX) + "px")     
+                .style("top", (d3.event.pageY - 28) + "px");    
+            
+            })                  
+        .on("mouseout", function(d) {       
+            div.transition()        
+                .duration(500)      
+                .style("opacity", 0);   
+        });
+
+
+
+    });
+}
+
+
+function drawChart4_2() {
+
+
+
+}
+
+function drawChart4_3() {
+   
+ 
+}
+
+
+    </script>
+
+</body>
+</html>
